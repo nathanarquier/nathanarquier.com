@@ -6,16 +6,16 @@
   <title>Nathan Arquier</title>
   <meta name="description" content="Nathan Arquier — building products people actually need." />
 
-  <!-- Fonts -->
+  <!-- Fonts: Satoshi via Fontshare -->
   <link rel="preconnect" href="https://api.fontshare.com" />
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500&display=swap" rel="stylesheet" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
+  <!-- Custom cursor (desktop only) -->
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
 
   <!-- Nav -->
   <nav class="nav" id="nav">
@@ -53,10 +53,10 @@
     <div class="container">
       <h2 class="section__label reveal">About</h2>
       <div class="about__grid">
-        <div class="about__text reveal">
+        <div class="about__text reveal" data-dir="left">
           <p class="body-large">Placeholder — content TBD Week 5.</p>
         </div>
-        <div class="about__skills reveal">
+        <div class="about__skills reveal" data-dir="right">
           <!-- Skills TBD -->
         </div>
       </div>
@@ -68,14 +68,14 @@
     <div class="container">
       <h2 class="section__label reveal">Work</h2>
       <div class="work__grid">
-        <article class="card reveal">
+        <article class="card reveal" data-dir="left">
           <div class="card__inner">
             <span class="card__tag">Case study</span>
             <h3 class="card__title">Lumen</h3>
             <p class="card__body">Placeholder — content TBD Week 5.</p>
           </div>
         </article>
-        <article class="card reveal">
+        <article class="card reveal" data-dir="right">
           <div class="card__inner">
             <span class="card__tag">Highlights</span>
             <h3 class="card__title">Assembly Global</h3>
@@ -90,7 +90,7 @@
   <section class="section section--thinking" id="thinking">
     <div class="container">
       <h2 class="section__label reveal">Thinking</h2>
-      <p class="body-large reveal">Placeholder — content TBD Week 5.</p>
+      <p class="body-large reveal" data-dir="left">Placeholder — content TBD Week 5.</p>
     </div>
   </section>
 
@@ -98,7 +98,7 @@
   <section class="section section--contact" id="contact">
     <div class="container">
       <h2 class="section__label reveal">Contact</h2>
-      <div class="contact__block reveal">
+      <div class="contact__block reveal" data-dir="right">
         <p class="contact__line body-large">Placeholder — content TBD Week 5.</p>
         <a href="mailto:nathan.arquier@gmail.com" class="btn btn--primary">Say hello</a>
       </div>
