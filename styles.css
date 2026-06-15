@@ -24,8 +24,18 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--c-base);
-  color: var(--c-text);
+  background:
+    linear-gradient(
+      180deg,
+      #164F49 0%,
+      #2A9D8F 12%,
+      #237C72 38%,
+      #2A9D8F 62%,
+      #1E7268 82%,
+      #164F49 100%
+    );
+  background-attachment: fixed;
+  color: var(--c-text-inv);
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.6;
@@ -144,12 +154,24 @@ h1, h2, h3 {
   overflow: hidden;
 }
 
+/* Soft fade at the hero bottom so blobs dissolve rather than hard-clip */
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 220px;
+  background: linear-gradient(to bottom, transparent, #2A9D8F);
+  z-index: 2;
+  pointer-events: none;
+}
+
 /* Animated gradient background */
 .hero__gradient {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: var(--c-grad-1);
 }
 
 .hero__blob {
@@ -271,14 +293,11 @@ h1, h2, h3 {
   padding-block: clamp(5rem, 10vw, 9rem);
 }
 
-.section--about    { background: var(--c-base); }
-.section--work     { background: color-mix(in srgb, var(--c-grad-1) 15%, var(--c-base)); }
-.section--thinking { background: var(--c-base); }
-.section--contact  { background: var(--c-grad-1); }
-
-.section--contact .section__label,
-.section--contact .body-large {
-  color: var(--c-text-inv);
+.section--about,
+.section--work,
+.section--thinking,
+.section--contact {
+  background: transparent;
 }
 
 /* ─── About ──────────────────────────────────────────────────────────────────── */
@@ -329,6 +348,7 @@ h1, h2, h3 {
   position: relative;
   z-index: 1;
   background: color-mix(in srgb, var(--c-grad-1) 20%, white 80%);
+  color: var(--c-text);
   border-radius: 1.2rem;
   margin: 2px;
   padding: 2.5rem;
