@@ -480,3 +480,66 @@ h1, h2, h3 {
   .reveal[data-dir="left"]  { transform: translateX(-28px); }
   .reveal[data-dir="right"] { transform: translateX( 28px); }
 }
+
+/* ─── Hero additions ─────────────────────────────────────────────────────────── */
+
+/* Gradient word: lilac → indigo on "early" */
+.hero__grad-word {
+  background: linear-gradient(90deg, var(--c-grad-3) 0%, #6366F1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Descriptor line */
+.hero__descriptor {
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  color: var(--c-text-inv);
+  opacity: 0.7;
+  max-width: 52ch;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+/* Button row */
+.hero__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Ghost / outline button */
+.btn--ghost {
+  background: transparent;
+  color: var(--c-text-inv);
+  border: 1.5px solid rgba(250, 249, 246, 0.4);
+}
+
+.btn--ghost:hover {
+  transform: translateY(-3px) scale(1.03);
+  border-color: rgba(250, 249, 246, 0.85);
+  box-shadow: 0 8px 24px rgba(250, 249, 246, 0.1);
+}
+
+/* Bounce scroll indicator */
+.hero__scroll-down {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: fit-content;
+  color: rgba(250, 249, 246, 0.5);
+  animation: bounce-down 2.2s ease-in-out infinite;
+  transition: color 0.2s;
+}
+
+.hero__scroll-down:hover { color: rgba(250, 249, 246, 0.9); }
+
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(7px); }
+}
+
+/* Stagger for 5th and 6th reveal siblings */
+.reveal:nth-child(5) { transition-delay: 0.32s; }
+.reveal:nth-child(6) { transition-delay: 0.40s; }
