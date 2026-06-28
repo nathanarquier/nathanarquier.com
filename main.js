@@ -11,73 +11,118 @@ onScroll();
 
 /* ─── Custom cursor ──────────────────────────────────────────────────────── */
 if (isDesktop) {
-  const cursor = document.getElementById('cursor');
+  const cursor     = document.getElementById('cursor');
+  const cursorGlow = document.getElementById('cursorGlow');
   let mouseX = -100, mouseY = -100;
-  let curX    = -100, curY   = -100;
+  let curX   = -100, curY   = -100;
+  let glowX  = -200, glowY  = -200;
 
   document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
   }, { passive: true });
 
-  const tickCursor = () => {
-    curX = lerp(curX, mouseX, 0.12);
-    curY = lerp(curY, mouseY, 0.12);
-    cursor.style.left = curX + 'px';
-    cursor.style.top  = curY + 'px';
-    requestAnimationFrame(tickCursor);
-  };
-  tickCursor();
-
-  /* Scale up on interactive elements */
-  document.querySelectorAll('a, button, .card, .btn').forEach(el => {
+  /* Links and buttons: size up only */
+  document.querySelectorAll('a, button, .btn').forEach(el => {
     el.addEventListener('mouseenter', () => cursor.classList.add('is-hovering'));
     el.addEventListener('mouseleave', () => cursor.classList.remove('is-hovering'));
   });
-}
 
-/* ─── Gradient blobs: lerped cursor parallax + hue-rotate shift ──────────── */
-if (isDesktop) {
-  const heroGradient = document.getElementById('heroGradient');
-  const blobs = heroGradient ? heroGradient.querySelectorAll('.hero__blob') : [];
-
-  let blobTargetX = 0, blobTargetY = 0;
-  let blobX = 0, blobY = 0;
-  let hueTarget = 0, hueCurrent = 0;
-
-  document.addEventListener('mousemove', (e) => {
-    /* Blobs move toward cursor — offset from centre scaled to ±40/25px */
-    blobTargetX = ((e.clientX / window.innerWidth)  - 0.5) * 80;
-    blobTargetY = ((e.clientY / window.innerHeight) - 0.5) * 50;
-
-    /* Subtle hue-rotate: cursor X maps to ±10 degrees */
-    hueTarget = ((e.clientX / window.innerWidth) - 0.5) * 20;
-  }, { passive: true });
-
-  const tickBlobs = () => {
-    blobX      = lerp(blobX,      blobTargetX, 0.05);
-    blobY      = lerp(blobY,      blobTargetY, 0.05);
-    hueCurrent = lerp(hueCurrent, hueTarget,   0.04);
-
-    blobs.forEach((blob, i) => {
-      const depth = (i + 1) * 0.4;
-      blob.style.transform = `translate(${blobX * depth}px, ${blobY * depth}px)`;
+  /* Cards and boxes: size up + glow halo */
+  document.querySelectorAll('.card, .contact__block').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.classList.add('is-hovering', 'is-card-hovering');
+      if (cursorGlow) cursorGlow.classList.add('is-active');
     });
+    el.addEventListener('mouseleave', () => {
+      cursor.classList.remove('is-hovering', 'is-card-hovering');
+      if (cursorGlow) cursorGlow.classList.remove('is-active');
+    });
+  });
 
-    if (heroGradient) {
-      heroGradient.style.filter = `hue-rotate(${hueCurrent}deg)`;
+  const tickCursor = () => {
+    curX  = lerp(curX,  mouseX, 0.25);  /* fast — near-instant feel */
+    curY  = lerp(curY,  mouseY, 0.25);
+    glowX = lerp(glowX, mouseX, 0.07);  /* slow — trails behind for halo */
+    glowY = lerp(glowY, mouseY, 0.07);
+
+    cursor.style.left = curX + 'px';
+    cursor.style.top  = curY + 'px';
+
+    if (cursorGlow) {
+      cursorGlow.style.left = glowX + 'px';
+      cursorGlow.style.top  = glowY + 'px';
     }
 
-    requestAnimationFrame(tickBlobs);
+    requestAnimationFrame(tickCursor);
   };
-  tickBlobs();
+  tickCursor();
 }
 
+/* ─── Scene: blob parallax + hero content mouse drift + scroll parallax ──── */
+const heroGradient = document.getElementById('heroGradient');
+const blobs        = heroGradient ? heroGradient.querySelectorAll('.hero__blob') : [];
+const heroContent  = document.querySelector('.hero__content');
+
+let blobTargetX = 0, blobTargetY = 0, blobX = 0, blobY = 0;
+let hueTarget = 0, hueCurrent = 0;
+let contentTargetX = 0, contentTargetY = 0, contentX = 0, contentY = 0;
+let heroScrollY = 0;
+
+if (isDesktop) {
+  document.addEventListener('mousemove', (e) => {
+    const nx = (e.clientX / window.innerWidth)  - 0.5;
+    const ny = (e.clientY / window.innerHeight) - 0.5;
+
+    /* Blobs drift toward cursor */
+    blobTargetX = nx * 80;
+    blobTargetY = ny * 50;
+
+    /* Subtle hue shift with cursor X */
+    hueTarget = nx * 20;
+
+    /* Hero text drifts very gently with cursor (depth illusion) */
+    contentTargetX = nx * 14;
+    contentTargetY = ny *  8;
+  }, { passive: true });
+}
+
+window.addEventListener('scroll', () => {
+  heroScrollY = window.scrollY;
+}, { passive: true });
+
+const tickScene = () => {
+  if (isDesktop) {
+    blobX      = lerp(blobX,      blobTargetX,    0.05);
+    blobY      = lerp(blobY,      blobTargetY,    0.05);
+    hueCurrent = lerp(hueCurrent, hueTarget,      0.04);
+    contentX   = lerp(contentX,   contentTargetX, 0.06);
+    contentY   = lerp(contentY,   contentTargetY, 0.06);
+
+    blobs.forEach((blob, i) => {
+      const depth       = (i + 1) * 0.4;
+      const scrollShift = heroScrollY * (i + 1) * 0.05;
+      blob.style.transform = `translate(${blobX * depth}px, ${blobY * depth - scrollShift}px)`;
+    });
+
+    if (heroGradient) heroGradient.style.filter = `hue-rotate(${hueCurrent}deg)`;
+
+    if (heroContent) {
+      const scrollPull = heroScrollY * 0.12;
+      heroContent.style.transform = `translate(${contentX}px, ${contentY - scrollPull}px)`;
+    }
+  } else {
+    /* Mobile: scroll parallax only */
+    if (heroContent) {
+      heroContent.style.transform = `translateY(${-heroScrollY * 0.10}px)`;
+    }
+  }
+
+  requestAnimationFrame(tickScene);
+};
+tickScene();
+
 /* ─── Scroll reveals: Intersection Observer ──────────────────────────────── */
-/*
- * CSS handles direction (data-dir="left"|"right") and the spring curve.
- * JS just toggles .is-visible once the element enters the viewport.
- */
 const revealObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
