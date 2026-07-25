@@ -62,6 +62,7 @@ if (isDesktop) {
 /* ─── Scene: blob parallax + hero content mouse drift + scroll parallax ──── */
 const heroGradient = document.getElementById('heroGradient');
 const blobs        = heroGradient ? heroGradient.querySelectorAll('.hero__blob') : [];
+const bgBlobs      = document.querySelectorAll('.bg-blob');
 const heroContent  = document.querySelector('.hero__content');
 
 let blobTargetX = 0, blobTargetY = 0, blobX = 0, blobY = 0;
@@ -105,7 +106,15 @@ const tickScene = () => {
       blob.style.transform = `translate(${blobX * depth}px, ${blobY * depth - scrollShift}px)`;
     });
 
+    bgBlobs.forEach((blob, i) => {
+      const depth = (i + 1) * 0.25;
+      blob.style.transform = `translate(${blobX * depth}px, ${blobY * depth}px)`;
+    });
+
     if (heroGradient) heroGradient.style.filter = `hue-rotate(${hueCurrent}deg)`;
+
+    const bgBlobsEl = document.querySelector('.bg-blobs');
+    if (bgBlobsEl) bgBlobsEl.style.filter = `hue-rotate(${hueCurrent}deg)`;
 
     if (heroContent) {
       const scrollPull = heroScrollY * 0.12;
@@ -136,3 +145,9 @@ const revealObserver = new IntersectionObserver(
 );
 
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ─── Positioning cards: JS-driven expand (per-card, not CSS :hover) ─────── */
+document.querySelectorAll('.edge-card').forEach(card => {
+  card.addEventListener('mouseenter', () => card.classList.add('is-expanded'));
+  card.addEventListener('mouseleave', () => card.classList.remove('is-expanded'));
+});
