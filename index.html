@@ -17,6 +17,12 @@
 </head>
 <body>
 
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="bg-blob bg-blob--1"></div>
+    <div class="bg-blob bg-blob--2"></div>
+    <div class="bg-blob bg-blob--3"></div>
+  </div>
+
   <!-- Custom cursor (desktop only) -->
   <div class="cursor" id="cursor" aria-hidden="true"></div>
   <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
@@ -47,7 +53,7 @@
       <p class="hero__tagline reveal">Not afraid of thinking big &amp; shipping <span class="hero__grad-word">early</span></p>
       <p class="hero__descriptor reveal">Marketing-trained product builder with commercial instinct for what users actually pay for</p>
       <div class="hero__buttons reveal">
-        <a href="#build" class="btn btn--primary">View Work</a>
+        <a href="#work" class="btn btn--primary">View Work</a>
         <a href="#contact" class="btn btn--ghost">Contact</a>
       </div>
       <a href="#about" class="hero__scroll-down reveal" aria-label="Scroll to next section">
@@ -59,21 +65,21 @@
   </section>
 
   <!-- Positioning -->
-  <section class="section section--positioning" id="positioning">
+  <section class="section positioning-section" id="positioning">
     <div class="container">
       <p class="positioning__mission reveal">I sincerely believe in the power of AI as a way to augment human intelligence rather than replace it, and I&rsquo;m committed to building products that embody that idea.</p>
-      <div class="positioning__grid">
-        <div class="positioning__card reveal">
+      <div class="edge-cards">
+        <div class="edge-card reveal">
           <i class="ti ti-arrows-exchange positioning__icon" aria-hidden="true"></i>
           <h3 class="positioning__title">Commercial Fluency</h3>
           <p class="positioning__body">My experience in performance marketing taught me how products make money before they reach users. I can think beyond feature development and into market value, a perspective most PMs build years into their careers.</p>
         </div>
-        <div class="positioning__card reveal">
+        <div class="edge-card reveal">
           <i class="ti ti-bulb positioning__icon" aria-hidden="true"></i>
           <h3 class="positioning__title">Lumen Founder</h3>
           <p class="positioning__body">I noticed a problem, built a solution, and validated it through user interviews. When 5 interviews returned zero confirmation of my original hypothesis, I pivoted and rebuilt, teaching me that being objective matters more than protecting your own ideas.</p>
         </div>
-        <div class="positioning__card reveal">
+        <div class="edge-card reveal">
           <i class="ti ti-cpu positioning__icon" aria-hidden="true"></i>
           <h3 class="positioning__title">AI-Native</h3>
           <p class="positioning__body">I build AI products with real APIs and automate workflows to move faster, while staying mindful to think critically and develop a personal point of view rather than outsourcing judgment to the model.</p>
