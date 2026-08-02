@@ -151,3 +151,28 @@ document.querySelectorAll('.edge-card').forEach(card => {
   card.addEventListener('mouseenter', () => card.classList.add('is-expanded'));
   card.addEventListener('mouseleave', () => card.classList.remove('is-expanded'));
 });
+
+/* ─── Lumen: live user count badge (via get_lumen_user_count RPC) ───────── */
+(async () => {
+  const badge = document.getElementById('lumenUserBadge');
+  if (!badge) return;
+
+  const SUPABASE_URL      = 'https://inmxnwerojearlnyvbyy.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlubXhud2Vyb2plYXJsbnl2Ynl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxMDIxNzUsImV4cCI6MjA5MjY3ODE3NX0.r6JBYFRaCweofjbPxMcD_9xmowWR6tuzai1lOUpb26M';
+
+  try {
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const { data, error } = await supabaseClient.rpc('get_lumen_user_count');
+
+    if (error) throw error;
+    if (typeof data !== 'number' || !Number.isFinite(data)) throw new Error('Unexpected RPC response shape');
+
+    /* get_lumen_user_count runs COUNT(DISTINCT user_id) via SECURITY DEFINER,
+       so a real 0 is a valid result here — only errors hide the badge. */
+    badge.textContent = `${data} early users`;
+    badge.hidden = false;
+  } catch (err) {
+    console.warn('Lumen user count unavailable:', err);
+    badge.hidden = true; /* fail silently in the UI — never show a broken badge */
+  }
+})();

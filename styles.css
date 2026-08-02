@@ -575,6 +575,127 @@ h1, h2, h3 {
   font-size: 0.9rem;
 }
 
+/* Tech-stack chips: subtle, sits below the description, never competes with the title */
+.card__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.card__chip {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 1rem;
+  background: rgba(13, 143, 168, 0.08);
+  border: 1px solid rgba(13, 143, 168, 0.18);
+  opacity: 0.7;
+}
+
+/* Live user-count badge: hidden until main.js confirms a real count (see fetch in main.js) */
+.card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--c-accent);
+}
+
+/* Our explicit display above beats the UA [hidden] rule at equal specificity — restate it */
+.card__badge[hidden] {
+  display: none;
+}
+
+.card__badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--c-accent);
+}
+
+.card__screenshot {
+  aspect-ratio: 16 / 9;
+  border: 1.5px dashed rgba(13, 143, 168, 0.35);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  opacity: 0.45;
+  letter-spacing: 0.02em;
+}
+
+.card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.25rem;
+}
+
+.card__cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.4rem;
+  border-radius: 2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition:
+    transform  0.3s cubic-bezier(0.34, 1.4, 0.64, 1),
+    box-shadow 0.3s ease,
+    opacity    0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.card__cta--primary {
+  background: var(--c-accent);
+  color: var(--c-text-inv);
+  box-shadow: 0 4px 16px rgba(13, 143, 168, 0.30);
+}
+
+.card__cta--primary:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 24px rgba(13, 143, 168, 0.45);
+}
+
+.card__cta--secondary {
+  background: transparent;
+  color: var(--c-accent);
+  border: 1.5px solid rgba(13, 143, 168, 0.4);
+}
+
+.card__cta--secondary:hover {
+  background: rgba(13, 143, 168, 0.08);
+  border-color: var(--c-accent);
+}
+
+/*
+ * Secondary CTA is hover-revealed only on devices with real pointer hover.
+ * Touch devices have no hover state, so gating visibility there would make
+ * the link permanently untappable — show it by default instead.
+ */
+@media (hover: hover) and (pointer: fine) {
+  .card__cta--secondary {
+    opacity: 0;
+    transform: translateY(4px);
+    pointer-events: none;
+  }
+
+  .work__grid .card:hover .card__cta--secondary {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+}
+
 /* ─── Contact ────────────────────────────────────────────────────────────────── */
 .contact__block {
   display: flex;
