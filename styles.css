@@ -66,6 +66,10 @@ body {
   filter: blur(80px);
   mix-blend-mode: screen;
   opacity: 0.15;
+  /* This element carries both the filter and its own animated transform
+     (float keyframes) — needs its own promotion hint alongside the parent's,
+     which carries the separate JS-driven parallax transform. */
+  will-change: transform;
 }
 
 .bg-blob--1 {
@@ -102,6 +106,18 @@ body {
 .bg-blob--3 .bg-blob-inner {
   background: radial-gradient(circle, var(--c-accent) 0%, transparent 70%);
   animation: float3 16s ease-in-out infinite;
+}
+
+/*
+ * Paused once scrolled past #work (JS toggles this via IntersectionObserver)
+ * — animation-play-state, not removing the animation, so it resumes cleanly
+ * from wherever it left off if the user scrolls back up. Hero blobs are
+ * untouched: they're only ever in view near the top, so pausing them here
+ * would never fire anyway, but this rule intentionally targets .bg-blob-inner
+ * only.
+ */
+.bg-blobs.is-paused .bg-blob-inner {
+  animation-play-state: paused;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -216,8 +232,8 @@ h1, h2, h3 {
 
 .nav.scrolled {
   background: rgba(6, 52, 82, 0.90);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -308,6 +324,9 @@ h1, h2, h3 {
   border-radius: 50%;
   filter: blur(80px);
   mix-blend-mode: screen;
+  /* Same reasoning as .bg-blob-inner above: filter + its own animated
+     transform live here, separate from the parent's JS-driven transform. */
+  will-change: transform;
 }
 
 .hero__blob--1 {
@@ -462,8 +481,8 @@ h1, h2, h3 {
 
 .edge-card {
   background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 1.25rem;
   padding: 2.5rem;
@@ -482,7 +501,8 @@ h1, h2, h3 {
 }
 
 .positioning__icon {
-  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
   color: var(--c-accent);
 }
 
