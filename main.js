@@ -157,21 +157,39 @@ const revealObserver = new IntersectionObserver(
 
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-/* ─── Bg-blobs: pause once scrolled past #work, resume on scroll back up ── */
+/* ─── #work observer: pause bg-blobs once scrolled past, and lazy-load/play
+   the Lumen demo video once #work is actually in view — one shared
+   IntersectionObserver rather than a second one just for the video. ──────── */
 const workSection = document.getElementById('work');
-if (workSection && bgBlobsEl) {
-  const bgBlobsPauseObserver = new IntersectionObserver(
+const lumenVideo   = document.querySelector('.card__screenshot-video');
+if (workSection && (bgBlobsEl || lumenVideo)) {
+  const workObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        /* Not intersecting + above the viewport (negative top) means we've
-           scrolled past it, rather than not having reached it yet. */
-        const scrolledPast = !entry.isIntersecting && entry.boundingClientRect.top < 0;
-        bgBlobsEl.classList.toggle('is-paused', scrolledPast);
+        if (bgBlobsEl) {
+          /* Not intersecting + above the viewport (negative top) means we've
+             scrolled past it, rather than not having reached it yet. */
+          const scrolledPast = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+          bgBlobsEl.classList.toggle('is-paused', scrolledPast);
+        }
+
+        if (lumenVideo) {
+          if (entry.isIntersecting) {
+            if (!lumenVideo.src) {
+              lumenVideo.poster = lumenVideo.dataset.poster;
+              lumenVideo.src    = lumenVideo.dataset.src;
+              lumenVideo.load();
+            }
+            lumenVideo.play().catch(() => {});
+          } else {
+            lumenVideo.pause();
+          }
+        }
       });
     },
     { threshold: 0 }
   );
-  bgBlobsPauseObserver.observe(workSection);
+  workObserver.observe(workSection);
 }
 
 /* ─── Positioning cards: JS-driven expand (per-card, not CSS :hover) ─────── */
