@@ -573,6 +573,12 @@ h1, h2, h3 {
   margin: 2px;
   padding: 2.5rem;
   min-height: 280px;
+  /* Grid row stretch grows the shorter .card to match its neighbor's height
+     (see .work__grid) — without this, a lighter card (e.g. Assembly Global,
+     no screenshot/actions) would leave its own inner content pinned to the
+     top and expose the outer gradient-border background as a bare gap
+     underneath instead of its own themed background. */
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -634,6 +640,31 @@ h1, h2, h3 {
   height: 6px;
   border-radius: 50%;
   background: var(--c-accent);
+}
+
+/* Icon-led highlight lines: same inline icon + one-line-of-text pattern as
+   the Positioning edge cards, sized down for a compact in-card list. */
+.card__highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.card__highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+.card__highlight-icon {
+  flex-shrink: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.15rem;
+  color: var(--c-accent);
 }
 
 .card__screenshot {
